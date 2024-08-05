@@ -11,6 +11,6 @@ const categoryRouter=Router()
 categoryRouter.use("/:categoryId/subCategories",subCategoriesRouter)
 categoryRouter.post("/", multerHost(validFiles.image).single("image"),auth(["admin"],["superAdmin"]),CC.createCategory)
 categoryRouter.patch("/updateCategory/:id",multerHost(validFiles.image).single("image"),auth(["admin","superAdmin"]),CC.updateCategory)
-categoryRouter.get("/",CC.getCategories)
+categoryRouter.get("/",auth(["user","admin","superAdmin"]),CC.getCategories)
 
 export default categoryRouter
