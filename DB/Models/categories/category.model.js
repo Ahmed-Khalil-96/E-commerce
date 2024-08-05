@@ -28,6 +28,9 @@ const categorySchema = new Schema({
         secure_url:String,
         public_id:String
 
+    },
+    customId:{
+        type:String,
     }
 },
 {timestamps:true,

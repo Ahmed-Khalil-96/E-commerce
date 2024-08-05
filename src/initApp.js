@@ -17,6 +17,7 @@ app.use("/superAdmin",routers.superAdminRouter)
 app.use("/auth",routers.authRouter)
 app.use("/user",routers.userRouter)
 app.use("/category",routers.categoryRouter)
+app.use("/subCategories",routers.subCategoriesRouter)
 app.use('*', (req, res,next)=>{
     return next(new AppError("Invalid URL",404))
 } )
