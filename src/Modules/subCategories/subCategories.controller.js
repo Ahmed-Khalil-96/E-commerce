@@ -73,3 +73,17 @@ export const updateSubCategory = asyncHandler(async(req,res,next)=>{
         await subCategory.save()
         return res.status(200).json({message:"Sub Category updated successfully"})
 })
+
+
+// ====================================get subCategories==================================
+export const getSubCategories = asyncHandler(async(req,res,next)=>{
+    const subcategories = await subCategoryModel.find({}).populate([
+        {   path:"category",
+            select:"name -_id"
+        },
+        {   path:"addedBy",
+            select:`firstName lastName -_id`
+        }
+    ])
+    return res.status(200).json(subcategories)
+})

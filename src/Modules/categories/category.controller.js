@@ -63,3 +63,18 @@ export const updateCategory= asyncHandler(async(req, res,next)=>{
         await category.save()
         return res.status(200).json({message:"Category updated successfully",category})
 })
+
+
+// ====================================getAllCategories===================
+export const getCategories = asyncHandler(async(req,res,next)=>{
+    const categories = await categoryModel.find().populate([{
+        path:"addedBy",
+        select:"firstName lastName -_id"
+    },
+    {
+        path:"subCategories",
+        select:"name slug -_id"
+    }
+])
+    return res.status(200).json({categories})
+})
