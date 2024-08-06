@@ -49,6 +49,10 @@ export const updateSubCategory = asyncHandler(async(req,res,next)=>{
     if(!subCategory) {
         return next(new AppError("Sub Category not found", 404));
         }
+
+        if(category._id!==subCategory.category){
+            return next(new AppError("Sub Category does not belong to this category", 400))
+        }
         if(subCategory.name === name){
             return next(new AppError("Sub Category name cannot be changed", 400))
         }
@@ -72,6 +76,37 @@ export const updateSubCategory = asyncHandler(async(req,res,next)=>{
         subCategory.slug=slug
         await subCategory.save()
         return res.status(200).json({message:"Sub Category updated successfully"})
+})
+
+
+
+// ====================================delete SubCategories===============================
+
+export const deleteSubcategories = asyncHandler(async(req,res,next)=>{
+
+    const{categoryId,subCategoryId}=req.params
+    const category = await categoryModel.findById(categoryId)
+    if(!category) {
+        return next(new AppError("Category not found", 404));
+        }
+        const subCategory = await subCategoryModel.findById(subCategoryId)
+        if(!subCategory) {
+            return next(new AppError("Sub Category not found", 404));
+            }
+            if(category._id!==subCategory.category){
+                return next(new AppError("Sub Category does not belong to this category", 400))
+                }
+        if(req.user.id!==subCategory.addedBy.toString()){
+            return next(new AppError("You are not authorized to delete this sub category", 403))
+        }
+
+        await cloudinary.api.delete_resources_by_prefix(`Ecommerce/categories/${category.customId}/subCategories/${subCategory.customId}`)
+        await cloudinary.api.delete_folder(`Ecommerce/categories/${category.customId}/subCategories/${subCategory.customId}`)
+
+        // =======>delete products related to this sub category<======
+
+        await subCategoryModel.deleteOne({_id:subCategory._id})
+        return res.status(200).json({message:"Sub Category deleted successfully"})
 })
 
 
