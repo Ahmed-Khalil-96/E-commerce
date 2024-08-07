@@ -160,3 +160,8 @@ if(!userExist){
 
 
 })
+// ==================================get all users====================================================
+export const getAllUsers = asyncHandler(async(req,res,next)=>{
+    const users = await userModel.find().select("-password").select("-_id")
+    return res.status(200).json(users)
+})

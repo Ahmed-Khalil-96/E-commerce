@@ -13,5 +13,6 @@ categoryRouter.post("/", multerHost(validFiles.image).single("image"),auth(["adm
 categoryRouter.patch("/updateCategory/:id",multerHost(validFiles.image).single("image"),auth(["admin","superAdmin"]),CC.updateCategory)
 categoryRouter.get("/",auth(["user","admin","superAdmin"]),CC.getCategories)
 categoryRouter.delete("/deleteCategory/:id",auth(["admin","superAdmin"]),CC.deleteCategory)
+categoryRouter.get("/:id",auth(["user","admin","superAdmin"]),CC.getCategory)
 
 export default categoryRouter

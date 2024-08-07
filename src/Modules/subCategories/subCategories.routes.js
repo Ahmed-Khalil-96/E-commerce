@@ -9,5 +9,6 @@ subCategoriesRouter.post("/", multerHost(validFiles.image).single("image"),auth(
 subCategoriesRouter.patch("/:subCategoryId",multerHost(validFiles.image).single("image"),auth(["admin","superAdmin"]),SCC.updateSubCategory)
 subCategoriesRouter.get("/",auth(["user","admin","superAdmin"]),SCC.getSubCategories)
 subCategoriesRouter.delete("/deleteSubcategory/:subCategoryId",auth(["admin","superAdmin"]),SCC.deleteSubcategories)
+subCategoriesRouter.get("/:id",auth(["user","admin","superAdmin"]),SCC.getSubCategory)
 
 export default subCategoriesRouter

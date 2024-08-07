@@ -90,4 +90,16 @@ export const getBrands = asyncHandler(async(req,res,next)=>{
 })
 
 
+// ===================================get single brand========================================
+export const getSingleBrand = asyncHandler(async(req,res,next)=>{
+    const {id}=req.params
+    const brand = await brandModel.findById(id).populate({
+        path:"addedBy",
+        select:"firstName lastName -_id"
+        })
+    if(!brand){
+        return next(new AppError("Brand not found",404))
+        }
+        return res.status(200).json({brand})    
 
+})

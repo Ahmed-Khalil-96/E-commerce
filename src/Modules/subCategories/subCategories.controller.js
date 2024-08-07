@@ -122,3 +122,20 @@ export const getSubCategories = asyncHandler(async(req,res,next)=>{
     ])
     return res.status(200).json(subcategories)
 })
+
+// =====================================get single subCategory ============================
+export const getSubCategory = asyncHandler(async(req,res,next)=>{
+    const {id}=req.params
+    const subCategory = await subCategoryModel.findById(id).populate([
+        {   path:"category",
+            select:"name -_id"
+            },
+            {   path:"addedBy",
+                select:`firstName lastName -_id`
+                }
+                ])
+    if(!subCategory){
+        return next(new AppError("Sub Category not found", 404))
+    }
+    return res.status(200).json(subCategory)
+})

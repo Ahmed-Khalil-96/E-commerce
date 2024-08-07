@@ -9,6 +9,7 @@ brandRouter.post("/",multerHost(validFiles.image).single("image"),auth(['admin',
 brandRouter.patch("/updateBrand/:id",multerHost(validFiles.image).single("image"),auth(["admin","superAdmin"]),BC.updateBrand)
 brandRouter.get("/",auth(["user","admin","superAdmin"]),BC.getBrands)
 brandRouter.delete("/deleteBrand/:id",auth(["admin","superAdmin"]),BC.deleteBrand)
+brandRouter.get("/:id",auth(["admin","superAdmin"]),BC.getSingleBrand)
 
 
 export default brandRouter

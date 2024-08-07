@@ -10,4 +10,5 @@ router.delete("/deleteUser/:id",auth(["user","admin","superAdmin"]),UC.deleteUse
 router.get("/profile/:id",auth(["user","admin","superAdmin"]),UC.getProfile)
 router.put("/updateUserPassByAdmin/:id",auth(["admin","superAdmin"]),UC.updateUserPassByAdmin)
 router.post("/adminApp",auth(["user"]),UC.adminApplication)
+router.get("/",auth(["admin","superAdmin"]),UC.getAllUsers)
 export default router

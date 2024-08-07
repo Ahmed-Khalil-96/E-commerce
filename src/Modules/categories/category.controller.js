@@ -103,3 +103,20 @@ export const getCategories = asyncHandler(async(req,res,next)=>{
 ])
     return res.status(200).json({categories})
 })
+
+
+// ====================================get specific category===============================
+export const getCategory = asyncHandler(async(req,res,next)=>{
+    const{id}=req.params
+    const category = await categoryModel.findById(id).populate([{
+        path:"subCategories",
+        select:"name -_id -category"
+    },{
+        path:"addedBy",
+        select:"firstName lastName -_id"
+    }])
+    if(!category){
+        return next(new AppError("Category not found",404))
+        }
+        return res.status(200).json({category})
+})
