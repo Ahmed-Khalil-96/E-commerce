@@ -4,6 +4,7 @@ import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import { nanoid } from "nanoid";
 import brandModel from "../../../DB/Models/brands/brands.model.js";
+import productModel from "../../../DB/Models/products/products.model.js";
 
 
 // =============================================createBrand===========================================
@@ -71,8 +72,19 @@ export const deleteBrand = asyncHandler(async(req,res,next)=>{
     if(req.user.id.toString()!==brand.addedBy.toString()){
         return next(new AppError("You are not authorized to delete this brand",403))
     }
+    const products = await productModel.find({brand:id})
+    let list = []
+    let lists = []
+    for(const product of products){
+        list.push(product.image.public_id)
+        for(const item of product.coverImages){
+            lists.push(item.public_id)
+        }
+    }
+    await productModel.deleteMany({brand:id})
     await brandModel.deleteOne({_id:id})
-
+    await cloudinary.api.delete_resources(list)
+    await cloudinary.api.delete_resources(lists)
     await cloudinary.api.delete_resources_by_prefix(`Ecommerce/brands/${brand.customId}`)
     await cloudinary.api.delete_folder(`Ecommerce/brands/${brand.customId}`)
     return res.status(200).json({message:"Brand deleted successfully"})

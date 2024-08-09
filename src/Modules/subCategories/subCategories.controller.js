@@ -5,6 +5,7 @@ import cloudinary from "../../utils/cloudinary.js";
 import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import slugify from "slugify";
+import productModel from "../../../DB/Models/products/products.model.js";
 
 // =============================createSubCategory==========================
 
@@ -104,6 +105,7 @@ export const deleteSubcategories = asyncHandler(async(req,res,next)=>{
         await cloudinary.api.delete_folder(`Ecommerce/categories/${category.customId}/subCategories/${subCategory.customId}`)
 
         // =======>delete products related to this sub category<======
+        await productModel.deleteMany({subCategory:subCategoryId})
 
         await subCategoryModel.deleteOne({_id:subCategory._id})
         return res.status(200).json({message:"Sub Category deleted successfully"})

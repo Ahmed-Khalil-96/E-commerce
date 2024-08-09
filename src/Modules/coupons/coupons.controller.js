@@ -26,12 +26,15 @@ export const updateCoupon = asyncHandler(async(req,res,next)=>{
     if(!couponExist){
         return next(new AppError('Coupon not found',404))
     }
-    if(couponExist.code ===code.toLowerCase()){
-        return next(new AppError('The coupon is the same',400))
-    }
-    if(await couponModel.findOne({code:code.toLowerCase()})){
+   
+    if(code){
+        if(couponExist.code ===code.toLowerCase()){
+            return next(new AppError('The coupon is the same',400))
+        }
+        const codeExist = await couponModel.findOne({code:code.toLowerCase()})
+        if(codeExist){
         return next(new AppError('Coupon already exist',400))
-    }
+    }}
     if(req.user.id!==couponExist.addedBy.toString()){
         return next(new AppError('You are not the owner of this coupon',403))
     }

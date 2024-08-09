@@ -5,6 +5,7 @@ import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import { nanoid } from "nanoid";
 import subCategoryModel from "../../../DB/Models/subCategory/subCategory.model.js";
+import productModel from "../../../DB/Models/products/products.model.js";
 
 
 // ===========================createCategory=======================================
@@ -82,7 +83,7 @@ export const deleteCategory = asyncHandler(async(req,res,next)=>{
         }
         await cloudinary.api.delete_resources_by_prefix(`Ecommerce/categories/${category.customId}`)
         await cloudinary.api.delete_folder(`Ecommerce/categories/${category.customId}`)
-
+        await productModel.deleteMany({category:id})
         await subCategoryModel.deleteMany({category:category._id})
 
         await categoryModel.deleteOne({_id:category._id})
