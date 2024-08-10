@@ -81,7 +81,8 @@ const productSchema = new Schema({
     coverImages:[{
         secure_url:String,
         public_id:String
-    }]
+    }],
+
    
 },{
     timestamps:true,

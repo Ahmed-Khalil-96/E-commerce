@@ -145,6 +145,9 @@ export const applyCoupon = asyncHandler(async(req,res,next)=>{
     if(couponExist.endDate<Date.now()){
         return next(new AppError('Coupon expired',404))
     }
+    if(couponExist.usedBy.includes(req.user.id)){
+        return next(new AppError('Coupon already used',409))
+    }
     const cart = await cartModel.findOne({user:req.user.id})
     if(!cart){
         return next(new AppError('Cart not found',404))

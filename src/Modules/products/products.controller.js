@@ -39,7 +39,8 @@ export const addProduct = asyncHandler(async (req, res,next) => {
     const list =[]
     for(const file of req.files.coverImages){
         const {secure_url,public_id}= await cloudinary.uploader.upload(file.path,{
-            folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}`
+            folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}`,
+        
         })
         list.push({secure_url,public_id})
     }

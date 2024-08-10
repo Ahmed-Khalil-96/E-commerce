@@ -29,10 +29,10 @@ export const couponSchema = new Schema({
         type:Date,
         required:true
 },
-    usedBy:{
+    usedBy:[{
         type:Schema.Types.ObjectId,
         red:"User"
-    }
+    }]
 
 },{
     timestamps:true,
