@@ -1,8 +1,11 @@
 import { Router } from "express";
 import * as UC from "./user.controller.js";
 import auth  from "../../Middlewares/auth.js";
+import orderRouter from "../orders/orders.routes.js";
 
 const router = Router()
+
+router.use("/:userId/orders",orderRouter)
 
 router.post("/createUser",auth(["admin","superAdmin"]),UC.createUser)
 router.patch("/updateUser/:id",auth(["user","admin","superAdmin"]),UC.updateUser)

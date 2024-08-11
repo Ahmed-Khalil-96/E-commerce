@@ -26,7 +26,7 @@ export const addToCart = asyncHandler(async(req,res,next)=>{
     if(!cartExist){
         const newCart = await cartModel.create({
             user:req.user.id,
-            products:[{productId:product,quantity, price:productExist.price}],
+            products:[{productId:product,quantity, price:productExist.subPrice}],
             totalPrice:quantity*productExist.price   
         })
         return res.status(201).json(newCart)

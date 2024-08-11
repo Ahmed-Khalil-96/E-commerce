@@ -39,6 +39,14 @@ const orderSchema = new Schema({
         Enum:["card","cash"],
         default:"cash"
     },
+    isPlaced:{
+        type:Boolean,
+        default:false
+    },
+    isShipped:{
+        type:Boolean,
+        default:false
+    },
     isPaid:{
         type:Boolean,
         default:false
