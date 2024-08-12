@@ -11,7 +11,7 @@ import { nanoid , customAlphabet} from "nanoid";
 
 // ==============================signUp====================================
 export const signUp = asyncHandler(async(req,res, next)=>{
-    const {firstName, lastName , email, password, gender, phone, address, birthDate, age }=req.body
+    const {firstName, lastName , email, password, gender, phone, addresses, birthDate, age }=req.body
     const userExist = await userModel.findOne({email:email.toLowerCase()})
     if(userExist){
         return next(new AppError("User already exist", 409))
@@ -30,7 +30,7 @@ export const signUp = asyncHandler(async(req,res, next)=>{
             }
             const hash = bcrypt.hashSync(password,Number(process.env.saltRounds))
     
-    const user = new userModel({firstName, lastName , email, password:hash, gender, phone, address, birthDate, age})
+    const user = new userModel({firstName, lastName , email, password:hash, gender, phone, addresses, birthDate, age})
     await user.save()
     res.status(201).json({message: "User created successfully", user})
 })

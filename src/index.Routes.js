@@ -5,11 +5,13 @@ import categoryRouter from "./Modules/categories/category.routes.js";
 import couponRouter from "./Modules/coupons/coupons.routes.js";
 import orderRouter from "./Modules/orders/orders.routes.js";
 import productRouter from "./Modules/products/products.routes.js";
+import reviewRouter from "./Modules/reviews/reviews.routes.js";
 import subCategoriesRouter from "./Modules/subCategories/subCategories.routes.js";
 import superAdminRouter from "./Modules/superAdmin/superAdmin.routes.js";
 import userRouter from "./Modules/User/user.routes.js";
+import wishListRouter from "./Modules/wishList/wishList.routes.js";
 
-
+wishListRouter
 export{
-    userRouter,authRouter,superAdminRouter, categoryRouter,subCategoriesRouter,brandRouter,productRouter,couponRouter,cartRouter,orderRouter
+    userRouter,authRouter,superAdminRouter, categoryRouter,subCategoriesRouter,brandRouter,productRouter,couponRouter,cartRouter,orderRouter,reviewRouter,wishListRouter
 }

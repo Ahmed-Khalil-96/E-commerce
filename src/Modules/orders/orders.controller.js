@@ -70,7 +70,7 @@ export const getAllOrders = asyncHandler(async(req,res,next)=>{
 
 })
 
-
+// ===================================================cancel order=====================================
 export const cancelOrder = asyncHandler(async(req,res,next)=>{
     const {id}=req.params
     const orderExist = await orderModel.findOne({_id:id,user:req.user.id,isCanceled:false})

@@ -1,13 +1,12 @@
 import slugify from "slugify";
 import categoryModel from "../../../DB/Models/categories/category.model.js";
 import cloudinary from "../../utils/cloudinary.js";
-import { AppError } from "../../utils/errorClass.js";
-import { asyncHandler } from "../../utils/errorHandling.js";
-import { nanoid } from "nanoid";
 import subCategoryModel from "../../../DB/Models/subCategory/subCategory.model.js";
 import productModel from "../../../DB/Models/products/products.model.js";
 import brandModel from "../../../DB/Models/brands/brands.model.js";
-
+import { AppError } from "../../utils/errorClass.js";
+import { asyncHandler } from "../../utils/errorHandling.js";
+import { nanoid } from "nanoid";
 
 // ==================================addProduct======================================
 export const addProduct = asyncHandler(async (req, res,next) => {

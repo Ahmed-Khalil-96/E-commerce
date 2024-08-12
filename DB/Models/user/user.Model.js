@@ -34,11 +34,39 @@ const userSchema = new Schema({
         required:[true,"Phone number is required"],
         trim:true,
     },
-    address:{
-        type:[String],
-        required:[true,"Address is required"],
-        trim:true,
-    },
+    addresses:[{
+        city:{
+            type:String,
+            required:[true,"City is required"],
+            trim:true,
+
+        },
+        state:{
+            type:String,
+            required:[true,"State is required"],
+            trim:true,
+            },
+        street:{
+            type:String,
+            required:[true,"Street is required"],
+            trim:true,
+            },
+            buildingNumber:{
+                type:String,
+                required:[true,"Building number is required"],
+                trim:true,
+            },
+            flatNumber:{
+                type:String,
+                required:[true,"Flat number is required"],
+                trim:true,
+            },
+        zipCode:{
+                type:String,
+                required:[true,"Zip is required"],
+                trim:true,
+            },
+    }],
     gender:{
         type:String,
         required:[true,"Gender is required"],

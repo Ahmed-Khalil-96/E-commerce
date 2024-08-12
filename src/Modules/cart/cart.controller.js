@@ -21,33 +21,25 @@ export const addToCart = asyncHandler(async(req,res,next)=>{
         return next(new AppError('Quantity exceeds stock',404))
     }
 
-
     const cartExist = await cartModel.findOne({user:req.user.id})
     if(!cartExist){
         const newCart = await cartModel.create({
             user:req.user.id,
             products:[{productId:product,quantity, price:productExist.subPrice}],
-            totalPrice:quantity*productExist.price   
+            totalPrice:quantity*productExist.subPrice   
         })
         return res.status(201).json(newCart)
     }
 else{
-
-    
     for(const item of cartExist.products){
         if(item.productId == product){
             item.quantity+=quantity
             flag=true
             if(item.quantity>productExist.stock){
                 item.quantity-=quantity
-                return next(new AppError('Quantity exceeds stock',404))
-                
-            }
-            
+                return next(new AppError('Quantity exceeds stock',404))   
+            }   
         }
-
-        
-        
     }
     if(!flag){cartExist.products.push({productId:product, quantity,price:productExist.price})}
 
