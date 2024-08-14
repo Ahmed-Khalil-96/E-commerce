@@ -2,6 +2,7 @@ import wishListModel from "../../../DB/Models/wishList/wishList.model.js";
 import productModel from "../../../DB/Models/products/products.model.js";
 import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 // ===========================addToWishList=================================================
 export const addToWishList = asyncHandler(async(req,res,next)=>{
@@ -45,3 +46,10 @@ export const removeFromWishList = asyncHandler(async(req,res,next)=>{
     return res.status(200).json({message:'Product deleted from wish list',wishList:newWishList})
 
 })
+
+// ==================================get user wishlist==============================
+export const getUserWishList = asyncHandler(async(req,res,next)=>{
+    const apiFeature = new apiFeatures(wishListModel.find({user:req.user.id}),req.query).filter().select().sort().pagination().search()
+    const wishList =await apiFeature.mongooseQuery 
+        return res.status(200).json({wishList}) 
+        })

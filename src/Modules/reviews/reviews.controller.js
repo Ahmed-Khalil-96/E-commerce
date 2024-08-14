@@ -67,11 +67,16 @@ export const deleteReview =asyncHandler(async(req,res,next)=>{
 // ================================get product reviews==========================
 
 export const getProductReviews = asyncHandler(async(req,res,next)=>{
+    let page = req.query.page*1||1
+
+    if(page<1)page=1
+    let limit = 3
+    let skip = (page-1)*limit
     const productId = req.params.productId
     const product = await productModel.findById(productId)
     if(!product) {
         return next(new AppError('Product not found', 404))
         }
-    const reviews = await reviewModel.find({product:productId})
+    const reviews = await reviewModel.find({product:productId}).skip(skip).limit(limit)
     return res.status(200).json({reviews})
 })

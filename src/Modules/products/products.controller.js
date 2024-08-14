@@ -7,6 +7,7 @@ import brandModel from "../../../DB/Models/brands/brands.model.js";
 import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import { nanoid } from "nanoid";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 // ==================================addProduct======================================
 export const addProduct = asyncHandler(async (req, res,next) => {
@@ -54,25 +55,15 @@ export const addProduct = asyncHandler(async (req, res,next) => {
 
 // ========================================get all products =========================================
 export const getProducts = asyncHandler(async(req,res,next)=>{
-    const products = await productModel.find().populate([{
-        path:"category",
-        select:"name  -_id"
-    },
-    {
-        path:"subCategory",
-        select:"name -_id"
-    },
-    {
-        path:"brand",
-        select:"name -_id"
-    },
-    {
-        path:"addedBy",
-        select:"firstName lastName -_id"
-    }
-])
+
+const apiFeature = new apiFeatures(productModel.find(),req.query).search().select().pagination().filter().sort()
+
+const products = await apiFeature.mongooseQuery
 return res.status(200).json({products})
 })
+
+
+
 
 
 // =======================================get single product============================================

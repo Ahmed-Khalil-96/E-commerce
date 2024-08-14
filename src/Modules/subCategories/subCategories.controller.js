@@ -6,6 +6,7 @@ import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import slugify from "slugify";
 import productModel from "../../../DB/Models/products/products.model.js";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 // =============================createSubCategory==========================
 
@@ -114,14 +115,10 @@ export const deleteSubcategories = asyncHandler(async(req,res,next)=>{
 
 // ====================================get subCategories==================================
 export const getSubCategories = asyncHandler(async(req,res,next)=>{
-    const subcategories = await subCategoryModel.find({}).populate([
-        {   path:"category",
-            select:"name -_id"
-        },
-        {   path:"addedBy",
-            select:`firstName lastName -_id`
-        }
-    ])
+  
+    const apiFeature = new apiFeaturesFeatures(subCategoryModel.find(),req.query).filter().select().sort().pagination().search()
+   
+    const subcategories = await apiFeature.mongooseQuery
     return res.status(200).json(subcategories)
 })
 

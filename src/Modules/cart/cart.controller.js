@@ -4,6 +4,7 @@ import couponModel from "../../../DB/Models/coupon/coupon.model.js";
 import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import { calcPrice, totalPrice } from "../../utils/calcPrice.js";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 
 
@@ -107,8 +108,8 @@ export const removeItem = asyncHandler(async(req,res,next)=>{
 
 // ====================================get logged user cart===================================
 export const getUserCart= asyncHandler(async(req,res,next)=>{
-
-    const cart = await cartModel.findOne({user:req.user.id})
+    const apiFeature = new apiFeatures(cartModel.find({user:req.user.id}),req.query).filter().select().sort().pagination().search()
+    const cart = await apiFeature.mongooseQuery
     if(!cart){
         return next(new AppError('Cart not found',404))
         }

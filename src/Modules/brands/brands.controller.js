@@ -5,6 +5,7 @@ import { asyncHandler } from "../../utils/errorHandling.js";
 import { nanoid } from "nanoid";
 import brandModel from "../../../DB/Models/brands/brands.model.js";
 import productModel from "../../../DB/Models/products/products.model.js";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 
 // =============================================createBrand===========================================
@@ -92,10 +93,9 @@ export const deleteBrand = asyncHandler(async(req,res,next)=>{
 // =====================================get All brands===========================================
 
 export const getBrands = asyncHandler(async(req,res,next)=>{
-    const brands = await brandModel.find().populate({
-        path:"addedBy",
-        select:"firstName lastName -_id"
-    })
+  
+    const apiFeature= new apiFeatures(brandModel.find(),req.query).filter().search().select().sort().pagination()
+    const brands = await apiFeatures.mongooseQuery
     return res.status(200).json({brands})
 })
 

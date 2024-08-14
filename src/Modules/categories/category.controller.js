@@ -6,6 +6,7 @@ import { asyncHandler } from "../../utils/errorHandling.js";
 import { nanoid } from "nanoid";
 import subCategoryModel from "../../../DB/Models/subCategory/subCategory.model.js";
 import productModel from "../../../DB/Models/products/products.model.js";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 
 // ===========================createCategory=======================================
@@ -93,15 +94,9 @@ export const deleteCategory = asyncHandler(async(req,res,next)=>{
 
 // ====================================getAllCategories=====================================
 export const getCategories = asyncHandler(async(req,res,next)=>{
-    const categories = await categoryModel.find().populate([{
-        path:"addedBy",
-        select:"firstName lastName -_id"
-    },
-    {
-        path:"subCategories",
-        select:"name slug -_id"
-    }
-])
+    
+    const apiFeature = new apiFeatures(categoryModel.find(),req.query).filter().select().sort().pagination().search()
+    const categories = await apiFeature.mongooseQuery
     return res.status(200).json({categories})
 })
 
