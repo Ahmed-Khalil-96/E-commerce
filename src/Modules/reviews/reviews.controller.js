@@ -3,6 +3,7 @@ import orderModel from "../../../DB/Models/orders/order.model.js";
 import productModel from "../../../DB/Models/products/products.model.js";
 import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
+import { apiFeatures } from "../../utils/apiFeatures.js";
 
 
 
@@ -67,16 +68,14 @@ export const deleteReview =asyncHandler(async(req,res,next)=>{
 // ================================get product reviews==========================
 
 export const getProductReviews = asyncHandler(async(req,res,next)=>{
-    let page = req.query.page*1||1
-
-    if(page<1)page=1
-    let limit = 3
-    let skip = (page-1)*limit
+    
     const productId = req.params.productId
     const product = await productModel.findById(productId)
     if(!product) {
         return next(new AppError('Product not found', 404))
         }
-    const reviews = await reviewModel.find({product:productId}).skip(skip).limit(limit)
+    const apiFeature = new apiFeatures(reviewModel.find({product:productId}),req.query).filter().select().sort().pagination().search()
+
+    const reviews = await apiFeature.mongooseQuery
     return res.status(200).json({reviews})
 })
