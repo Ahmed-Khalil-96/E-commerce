@@ -30,7 +30,7 @@ function generateCustomerInformation(doc, invoice) {
   doc
     .fillColor("#444444")
     .fontSize(20)
-    .text("Orders", 50, 160);
+    .text("Order Details", 50, 160);
 
   generateHr(doc, 185);
 
