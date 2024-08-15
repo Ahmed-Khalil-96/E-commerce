@@ -1,3 +1,3 @@
 export const globalErrorHandling = (err, req,res, next)=>{
-    return res.status(err.statusCode||500).json({msg:err.message})
+    return res.status(err.statusCode||500).json({msg:err.message,stack:err.stack})
 }

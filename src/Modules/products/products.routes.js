@@ -12,6 +12,7 @@ productRouter.use("/:productId/reviews",reviewRouter)
 productRouter.post("/",multerHost(validFiles.image).fields([{name:"image",maxCount:1},{name:"coverImages", maxCount:3}]),auth(["admin","superAdmin"]),PC.addProduct)
 productRouter.get("/",auth(["user","admin","superAdmin"]), PC.getProducts)
 productRouter.get("/product/:id",auth(["user","admin","superAdmin"]),PC.getSingleProduct)
+productRouter.put("/:id",multerHost(validFiles.image).fields([{name:"image",maxCount:1},{name:"coverImages",maxCount:3}]),auth(["user","admin"]),PC.updateProduct)
 
 
 export default productRouter

@@ -34,12 +34,12 @@ export const addProduct = asyncHandler(async (req, res,next) => {
     }
    const customId = nanoid(5)
     const {secure_url, public_id}= await cloudinary.uploader.upload(req.files.image[0].path,{
-        folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}`
+        folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}/mainImage`
     })
     const list =[]
     for(const file of req.files.coverImages){
         const {secure_url,public_id}= await cloudinary.uploader.upload(file.path,{
-            folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}`,
+            folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}/coverImages`,
         
         })
         list.push({secure_url,public_id})
@@ -91,4 +91,91 @@ if(!product){
 }
 return res.status(200).json({product})
 
+})
+
+
+// ===================================update product====================================
+export const updateProduct = asyncHandler(async (req, res,next) => {
+    const {title, description, price, discount, category, subCategory, brand, stock}=req.body
+    const {id} = req.params    
+    const categoryExist = await categoryModel.findById(category)
+    if(!categoryExist){
+    return next(new AppError("Category not found", 404))
+    }
+
+    const subCategoryExist = await subCategoryModel.findOne({_id:subCategory,category})
+        if(!subCategoryExist){
+            return next(new AppError("Sub Category not found", 404))
+            }
+    const brandExist = await brandModel.findById(brand)
+        if(!brandExist){
+            return next(new AppError("Brand not found", 404))
+        }
+    const product = await productModel.findOne({_id:id,addedBy:req.user.id})
+    if(!product){
+        return next(new AppError("Product not found", 404))
+        }
+
+
+        if(title){
+            if(product.title ===title.toLowerCase()){
+                return next(new AppError("Product title match the old title", 409))
+            }
+            if(await productModel.findOne({title:title.toLowerCase()})){
+                return next(new AppError("Product title already exist", 409))
+            }
+            product.title=title.toLowerCase()
+            product.slug= slugify(title,{
+                lower:true
+            })
+        }
+      
+        if(description){
+            product.description=description
+        }
+        if(stock){
+            product.stock=stock
+        }
+
+        if(price&&discount){
+            product.price=price
+            product.discount=discount
+            product.subPrice=price-(price*(discount/100))
+        }
+        else if(price){
+            product.price=price
+            product.subPrice=price-(price*(product.discount/100))
+        }
+        else if(discount){
+            product.discount=discount
+            product.subPrice=product.price-(product.price*(discount/100))
+        }
+
+        if(req.files){
+            if(req.files?.image?.length>0){
+
+                await cloudinary.uploader.destroy(product.image.public_id)
+                const {secure_url,public_id}=await cloudinary.uploader.upload(req.files.image[0].path,{
+                    folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${product.customId}/mainImage`,
+
+                })
+                product.image={secure_url,public_id}
+            }
+
+            if(req.files.coverImages?.length>0){
+
+                let list = []
+                await cloudinary.api.delete_resources_by_prefix(`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${product.customId}/coverImages`)
+                for(const file of req.files.coverImages){
+                    const {secure_url,public_id}=await cloudinary.uploader.upload(file.path,{
+                        folder:`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${product.customId}/coverImages`
+                    })
+                    list.push({secure_url,public_id})
+                }
+                product.coverImages=list
+            }
+        }
+        await product.save()
+
+    return res.status(201).json({message:"Product updated successfully",product})
 })

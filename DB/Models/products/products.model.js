@@ -74,9 +74,9 @@ const productSchema = new Schema({
         type:Number,
         default:0
         },
-        rateNum:{
-            type:Number,
-            default:0
+    rateNum:{
+        type:Number,
+        default:0
         },
     image:{
         secure_url:String,

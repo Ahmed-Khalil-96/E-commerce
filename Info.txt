@@ -32,7 +32,7 @@ export const generalFiled = {
         mimetype: joi.string().required(),
         encoding: joi.string().required(),
         originalname: joi.string().required(),
-        fieldname: joi.string().required())
+        fieldname: joi.string().required()})
 };
 ==================================================== sending Email  =================================   
 

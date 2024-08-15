@@ -17,10 +17,10 @@ export const addReview =asyncHandler(async(req,res,next)=>{
         return next(new AppError('Product not found', 404))
         }
 
-    // const reviewExist = await reviewModel.findOne({user:req.user.id,product:productId})
-    // if(reviewExist) {
-    //     return next(new AppError('You have already reviewed this product', 400))
-    //     }
+    const reviewExist = await reviewModel.findOne({user:req.user.id,product:productId})
+    if(reviewExist) {
+        return next(new AppError('You have already reviewed this product', 400))
+        }
 
      const order = await orderModel.findOne({
         user:req.user.id,
