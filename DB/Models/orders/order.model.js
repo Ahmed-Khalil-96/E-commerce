@@ -7,6 +7,11 @@ const orderSchema = new Schema({
         required:true
     },
     products:[{
+        title:{
+            type:String,
+            required:true,
+            trim:true
+        },
 
         productId:{
             type: Schema.Types.ObjectId,
@@ -25,13 +30,37 @@ const orderSchema = new Schema({
     discount:Number ,
     totalPriceAfterDiscount:Number,
     address:{
-        city:String,
-        street:String,
-        houseNumber:String,
-        FirstName:String,
-        LastName:String,
-        phone:String,
-        
+        city:{
+            type:String,
+            required:[true,"City is required"],
+            trim:true,
+
+        },
+        state:{
+            type:String,
+            required:[true,"State is required"],
+            trim:true,
+            },
+        street:{
+            type:String,
+            required:[true,"Street is required"],
+            trim:true,
+            },
+            buildingNumber:{
+                type:String,
+                required:[true,"Building number is required"],
+                trim:true,
+            },
+            flatNumber:{
+                type:String,
+                required:[true,"Flat number is required"],
+                trim:true,
+            },
+        zipCode:{
+                type:String,
+                required:[true,"Zip is required"],
+                trim:true,
+            },
     },
     paymentMethod:{
         type:String,

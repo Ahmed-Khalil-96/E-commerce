@@ -4,6 +4,8 @@ import productModel from "../../../DB/Models/products/products.model.js";
 import couponModel from "../../../DB/Models/coupon/coupon.model.js";
 import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
+import { createInvoice } from "../../utils/pdf.js";
+import sendEmail from "../../services/sendEmail.js";
 
 
 // ==================================create order ============================================================
@@ -20,7 +22,7 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
         const order = new orderModel({
         user:req.user.id,
         products:cart.products,
-        address,
+        address:address||req.user.addresses[0],
         totalPrice:cart.totalPrice,
         discount:discount,
         totalPriceAfterDiscount:totalPriceAfterDiscount,
@@ -38,7 +40,31 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
     }
    
     await cartModel.findOneAndDelete({user:req.user.id})
-    res.status(201).json({message:"Order created successfully",order})
+
+    const invoice = {
+        shipping: {
+          name: `${req.user.firstName} ${req.user.lastName  }`,
+          address:` ${order.address.buildingNumber} ${order.address.street},${order.address.state}`,
+          city: order.address.city,
+          state: order.address.state,
+          country: "Egypt",
+          postal_code: order.address.zipCode
+        },
+        items: order.products,
+        subtotal: order.totalPrice,
+        paid:order.totalPriceAfterDiscount,
+        invoice_nr: order._id,
+        date:order.createdAt,
+        discount:order.discount||0
+      };
+      
+      createInvoice(invoice, "invoice.pdf");
+      await sendEmail(req.user.email,"Order Placed",`<p>Your Order details</p>`,[
+        {path:"invoice.pdf",
+        contentType:"application/pdf"
+        }
+      ])
+   return res.status(201).json({message:"Order created successfully",order})
 })
 
 // =============================================get own orders============================================================

@@ -7,6 +7,11 @@ const cartSchema = new Schema({
         required:true
     },
     products:[{
+        title:{
+            type:String,
+            required:true,
+            trim:true
+        },
         productId:{
             type:Schema.Types.ObjectId,
             ref:"Product"

@@ -26,7 +26,7 @@ export const addToCart = asyncHandler(async(req,res,next)=>{
     if(!cartExist){
         const newCart = await cartModel.create({
             user:req.user.id,
-            products:[{productId:product,quantity, price:productExist.subPrice}],
+            products:[{title:productExist.title,productId:product,quantity, price:productExist.subPrice}],
             totalPrice:quantity*productExist.subPrice   
         })
         return res.status(201).json(newCart)
@@ -42,7 +42,7 @@ else{
             }   
         }
     }
-    if(!flag){cartExist.products.push({productId:product, quantity,price:productExist.price})}
+    if(!flag){cartExist.products.push({title:productExist.title,productId:product, quantity,price:productExist.price})}
 
 }
 

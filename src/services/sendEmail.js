@@ -11,13 +11,14 @@ service:"gmail",
 });
 
 
-const sendEmail = async (to, subject, html)=> {
+const sendEmail = async (to, subject, html,attachments=[])=> {
 
   const info = await transporter.sendMail({
     from: `${process.env.username} <${process.env.gmail}>`, 
     to: to ? to :"",
     subject: subject? subject:"",
-    html: html? html:""
+    html: html? html:"",
+    attachments
   });
 if(info.accepted.length){
     return true
