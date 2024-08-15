@@ -130,7 +130,7 @@ function generateInvoiceTable(doc, invoice) {
     duePosition,
     "",
     "",
-    "Coupon percentage",
+    "Discount",
     "",
    `${invoice.discount}%`
   );
