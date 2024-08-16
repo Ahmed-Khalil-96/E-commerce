@@ -8,8 +8,8 @@ const subCategoriesRouter = Router({mergeParams:true})
 
 subCategoriesRouter.post("/", multerHost(validFiles.image).single("image"),auth([systemRoles.admin]),SCC.createSubCategory)
 subCategoriesRouter.patch("/:subCategoryId",multerHost(validFiles.image).single("image"),auth([systemRoles.admin]),SCC.updateSubCategory)
-subCategoriesRouter.get("/",auth([Object(systemRoles.values)]),SCC.getSubCategories)
+subCategoriesRouter.get("/",auth([Object.values(systemRoles)]),SCC.getSubCategories)
 subCategoriesRouter.delete("/deleteSubcategory/:subCategoryId",auth([systemRoles.admin]),SCC.deleteSubcategories)
-subCategoriesRouter.get("/:id",auth([Object(systemRoles.values)]),SCC.getSubCategory)
+subCategoriesRouter.get("/:id",auth([Object.values(systemRoles)]),SCC.getSubCategory)
 
 export default subCategoriesRouter
