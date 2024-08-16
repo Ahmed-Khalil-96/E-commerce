@@ -29,11 +29,16 @@ export const createSubCategory = asyncHandler(async(req,res,next)=>{
         const{secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{
             folder:`Ecommerce/categories/${category.customId}/subCategories/${customId}`
         })
+        req.filePath=`Ecommerce/categories/${category.customId}/subCategories/${customId}`
         const slug = slugify(name,{
             lower:true
         })
 
      await subCategoryModel.create({name,slug,category:categoryId,addedBy:req.user.id,customId,image:{secure_url,public_id}})
+     req.data={
+        model:subCategoryModel,
+        id:subCategory._id
+     }
      return res.status(201).json({message:"Sub Category created successfully"})
 })
 

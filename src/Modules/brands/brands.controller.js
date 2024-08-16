@@ -22,10 +22,15 @@ export const createBrand = asyncHandler(async(req,res,next)=>{
     const {secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{
         folder:`Ecommerce/brands/${customId}`
     })
+    req.filePath=`Ecommerce/brands/${customId}`
     const slug = slugify(name,{
         lower:true
     })
    const brand = await brandModel.create({name,slug,addedBy:req.user.id,image:{secure_url,public_id},customId})
+   req.data={
+    model:brandModel,
+    id:brand._id
+   }
     return res.status(201).json({message:"Brand created successfully",brand})
 })
 
@@ -95,7 +100,7 @@ export const deleteBrand = asyncHandler(async(req,res,next)=>{
 export const getBrands = asyncHandler(async(req,res,next)=>{
   
     const apiFeature= new apiFeatures(brandModel.find(),req.query).filter().search().select().sort().pagination()
-    const brands = await apiFeatures.mongooseQuery
+    const brands = await apiFeature.mongooseQuery
     return res.status(200).json({brands})
 })
 

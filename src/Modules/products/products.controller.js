@@ -9,6 +9,7 @@ import { asyncHandler } from "../../utils/errorHandling.js";
 import { nanoid } from "nanoid";
 import { apiFeatures } from "../../utils/apiFeatures.js";
 
+
 // ==================================addProduct======================================
 export const addProduct = asyncHandler(async (req, res,next) => {
     const {title, description, price, discount , category, subCategory ,brand,stock}=req.body
@@ -44,10 +45,15 @@ export const addProduct = asyncHandler(async (req, res,next) => {
         })
         list.push({secure_url,public_id})
     }
+    req.filePath=`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${customId}`
    const slug = slugify(title,{
         lower:true
     })
     const product = await productModel.create({title,description,price,stock,category,brand,subCategory,image:{secure_url,public_id}, coverImages:list,customId,subPrice,discount,slug,addedBy:req.user.id})
+    req.data={
+        model:productModel,
+        id:product._id
+    }
     return res.status(201).json({message:"Product added successfully",product})
 })
 
@@ -178,4 +184,33 @@ export const updateProduct = asyncHandler(async (req, res,next) => {
         await product.save()
 
     return res.status(201).json({message:"Product updated successfully",product})
+})
+
+// ==============================delete product=====================================
+export const deleteProduct = asyncHandler(async (req, res,next) => {
+    const { category, subCategory, brand}=req.body
+    const {id} = req.params    
+    const categoryExist = await categoryModel.findById(category)
+    if(!categoryExist){
+    return next(new AppError("Category not found", 404))
+    }
+
+    const subCategoryExist = await subCategoryModel.findOne({_id:subCategory,category})
+        if(!subCategoryExist){
+            return next(new AppError("Sub Category not found", 404))
+            }
+    const brandExist = await brandModel.findById(brand)
+        if(!brandExist){
+            return next(new AppError("Brand not found", 404))
+        }
+    const product = await productModel.findOne({_id:id,addedBy:req.user.id})
+    if(!product){
+        return next(new AppError("Product not found", 404))
+        }
+
+    await cloudinary.api.delete_resources_by_prefix(`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${product.customId}`)
+    await cloudinary.api.delete_folder(`Ecommerce/categories/${categoryExist.customId}/subCategories/${subCategoryExist.customId}/products/${product.customId}`)
+    
+    await productModel.deleteOne({_id:id})
+    return res.status(201).json({message:"Product deleted successfully" })
 })

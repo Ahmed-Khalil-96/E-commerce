@@ -20,10 +20,15 @@ export const headers = {
 
 }
 =========================================================================================
+const validationObjectId=(value,helper)=>{
+    return Types.objectId.isValid(value)? true : helper.message("invalid object id")
+}
+
 export const generalFiled = {
     email: joi.string().email({ tlds: { allow: ["outlook", "com"] }, minDomainSegments: 2 }).required(),
     password: joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).required(),
     rePassword: joi.string().valid(joi.ref("password")).required(),
+    id:joi.string().custom(validationObjectId),
     file: joi.object({
  	size: joi.number().positive().required(),
         path: joi.string().required(),

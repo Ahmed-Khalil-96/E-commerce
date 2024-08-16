@@ -24,11 +24,19 @@ export const createCategory = asyncHandler(async(req,res,next)=>{
     const {secure_url,public_id} = await cloudinary.uploader.upload(req.file.path,{
         folder:`Ecommerce/categories/${customId}`
     })
+    req.filePath= `Ecommerce/categories/${customId}`
     const slug = slugify(name,{
         lower:true
     })
 
     const category = await categoryModel.create({name,addedBy:req.user.id,slug,image:{secure_url,public_id},customId})
+    req.data={
+        model:categoryModel,
+        id:category._id
+    }
+    const x = 4
+    x=5
+
     return res.status(201).json({message:"Category created successfully",category})
 })
 

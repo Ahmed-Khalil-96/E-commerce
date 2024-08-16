@@ -2,16 +2,17 @@ import { Router } from "express";
 import * as UC from "./user.controller.js";
 import auth  from "../../Middlewares/auth.js";
 import orderRouter from "../orders/orders.routes.js";
+import { systemRoles } from "../../utils/systemRoles.js";
 
 const router = Router()
 
 router.use("/:userId/orders",orderRouter)
 
-router.post("/createUser",auth(["admin","superAdmin"]),UC.createUser)
-router.patch("/updateUser/:id",auth(["user","admin","superAdmin"]),UC.updateUser)
-router.delete("/deleteUser/:id",auth(["user","admin","superAdmin"]),UC.deleteUser)
-router.get("/profile/:id",auth(["user","admin","superAdmin"]),UC.getProfile)
-router.put("/updateUserPassByAdmin/:id",auth(["admin","superAdmin"]),UC.updateUserPassByAdmin)
-router.post("/adminApp",auth(["user"]),UC.adminApplication)
-router.get("/",auth(["admin","superAdmin"]),UC.getAllUsers)
+router.post("/createUser",auth([systemRoles.admin,systemRoles.superAdmin]),UC.createUser)
+router.patch("/updateUser/:id",auth([Object(systemRoles.values)]),UC.updateUser)
+router.delete("/deleteUser/:id",auth([Object(systemRoles.values)]),UC.deleteUser)
+router.get("/profile/:id",auth([Object(systemRoles.values)]),UC.getProfile)
+router.put("/updateUserPassByAdmin/:id",auth([systemRoles.admin,systemRoles.superAdmin]),UC.updateUserPassByAdmin)
+router.post("/adminApp",auth([systemRoles.user]),UC.adminApplication)
+router.get("/",auth([systemRoles.admin,systemRoles.superAdmin]),UC.getAllUsers)
 export default router

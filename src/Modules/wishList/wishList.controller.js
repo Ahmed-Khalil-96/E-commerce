@@ -16,6 +16,10 @@ export const addToWishList = asyncHandler(async(req,res,next)=>{
     const wishList = await wishListModel.findOne({user:req.user.id})
     if(!wishList){
         const newWishList = await wishListModel.create({user:req.user.id,products:[productId]})
+        req.data={
+            model:wishListModel,
+            id:newWishList._id
+        }
         return res.status(201).json({message:'Product added to wish list',wishList:newWishList})}
 
     const newWishList = await wishListModel.findOneAndUpdate({user:req.user.id},{$addToSet:{products:productId}},{new:true}).populate({

@@ -13,6 +13,10 @@ export const addCoupon = asyncHandler(async(req,res,next)=>{
         return next(new AppError('Coupon already exist',400))
     }
     const coupon = await couponModel.create({code,amount,startDate,endDate,addedBy:req.user.id})
+    req.data={
+        model:couponModel,
+        id:coupon._id
+    }
     res.status(201).json({message:'Coupon created successfully',coupon})
 })
 

@@ -1,17 +1,27 @@
 
-import connection from '../DB/connectionDb.js'
+import connection from '../DB/connectionDB.js'
 import * as routers from './index.Routes.js'
+import { deleteFromCloudinary } from './utils/deleteFromCloudinary.js'
+import { deleteFromDb } from './utils/deleteFromDB.js'
 import { AppError } from './utils/errorClass.js'
 import { globalErrorHandling } from './utils/globalErrorHandling.js'
 import dotenv from "dotenv"
 dotenv.config({path: path.resolve("config/.env")});
 import path from "path"
+import cors from "cors"
+
+
 
 export const initApp = (app, express)=>{
   
 
 app.use(express.json())
+
+app.use(cors())
 connection()
+app.get("/",(req,res)=>{
+    res.status(200).json("Server is running")
+})
 
 app.use("/superAdmin",routers.superAdminRouter)
 app.use("/auth",routers.authRouter)
@@ -28,6 +38,6 @@ app.use('*', (req, res,next)=>{
     return next(new AppError("Invalid URL",404))
 } )
 
-app.use(globalErrorHandling)
-app.listen(process.env.port, () => console.log(`Example app listening on port ${process.env.port}!`))
+app.use(globalErrorHandling,deleteFromCloudinary,deleteFromDb)
+
 }

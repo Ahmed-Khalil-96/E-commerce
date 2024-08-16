@@ -37,6 +37,10 @@ export const addReview =asyncHandler(async(req,res,next)=>{
             rate,
             product:productId
         })
+        req.data={
+            model:reviewModel,
+            id:review._id
+        }
 
 let sum = product.rateAvg*product.rateNum
     sum+=rate

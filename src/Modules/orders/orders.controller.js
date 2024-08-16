@@ -30,6 +30,10 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
         isPlaced:true
     })
     await order.save()
+    req.data={
+        model:orderModel,
+        id:order._id
+    }
 
     for (const product of order.products) {
         await productModel.findByIdAndUpdate(product.productId,{$inc:{stock:-product.quantity}})

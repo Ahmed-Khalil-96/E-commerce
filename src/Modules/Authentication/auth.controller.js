@@ -32,6 +32,10 @@ export const signUp = asyncHandler(async(req,res, next)=>{
     
     const user = new userModel({firstName, lastName , email, password:hash, gender, phone, addresses, birthDate, age})
     await user.save()
+    req.data={
+        model:userModel,
+        id:user._id
+    }
     res.status(201).json({message: "User created successfully", user})
 })
 
