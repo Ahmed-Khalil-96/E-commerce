@@ -18,10 +18,10 @@ export const signUp = asyncHandler(async(req,res, next)=>{
     }
 
     const token = jwt.sign({email},process.env.confirmEmailToken)
-    const link = `${req.protocol}://${req.headers.host}/user/confirmEmail/${token}`
+    const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`
 
     const refToken = jwt.sign({email},process.env.refreshToken_key)
-    const refLink = `${req.protocol}://${req.headers.host}/user/refToken/${refToken}`
+    const refLink = `${req.protocol}://${req.headers.host}/auth/refToken/${refToken}`
 
     const data = await sendEmail(email, "Confirm email", `<a href = ${link}>please click her to confirm your email</a> <br>
         <a href = ${refLink}>click here to resend verification link</a>`)
@@ -68,7 +68,7 @@ export const resendEmail = asyncHandler(async(req, res, next)=>{
         return next(new AppError("User not found or already confirmed", 404))
         }
         const token = jwt.sign({email:decoded.email},process.env.confirmEmailToken, {expiresIn:60})
-    const link = `${req.protocol}://${req.headers.host}/user/confirmEmail/${token}`
+    const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`
         const data = await sendEmail(decoded.email, "please confirm your email",`<a href= ${link}>please click here to confirm your email</a>`)
         if(!data){
             return next(new AppError("Failed to send email", 500))

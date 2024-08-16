@@ -27,10 +27,10 @@ export const createUser= asyncHandler(async(req,res,next)=>{
         return next(new AppError("User role only is permitted", 400))
     }
     const token = jwt.sign({email},process.env.confirmEmailToken)
-    const link = `${req.protocol}://${req.headers.host}/user/confirmEmail/${token}`
+    const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`
 
     const refToken = jwt.sign({email},process.env.refreshToken_key)
-    const refLink = `${req.protocol}://${req.headers.host}/user/refToken/${refToken}`
+    const refLink = `${req.protocol}://${req.headers.host}/auth/refToken/${refToken}`
 
     const data = await sendEmail(email, "Confirm email", `<a href = ${link}>please click her to confirm your email</a> <br>
         <a href = ${refLink}>click here to resend verification link</a>`)
