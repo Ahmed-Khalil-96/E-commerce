@@ -19,8 +19,10 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 - **Image Handling**: 
   - **Brands, Categories, Subcategories**: Images are uploaded to Cloudinary.
   - **Products**: Each product features a main image and multiple cover images, with each image organized into different folders within the product's directory.
-- **Coupons Module**: Admins can manage coupons; users can apply them during checkout for discounts.
-- **Cart Management**: Users can handle their carts, apply coupons, and view detailed pricing information.
+
+### Coupons & Cart Management
+- **Coupons Module**: Admins can manage coupons with CRUD operations. Users can apply coupons during checkout for discounts.
+- **Cart Management**: Users can handle their carts, apply coupons, and view detailed pricing information before checkout.
 
 ### Order & Payment
 - **Order Processing**: Users can place orders, apply coupons, and manage their orders with a cash payment option (card checkout coming soon).
@@ -32,6 +34,7 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 - **Wishlist**: Users can maintain a wishlist of favorite products.
 
 ### Admin Features
+- **User Management**: Admins can perform CRUD operations on users.
 - **Admin Role Application**: Users can apply for admin roles; only the Super Admin has the authority to approve or reject applications.
 
 ### Error Handling & API Features
@@ -48,7 +51,7 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 ## 💻 Usage
 
 1. **Sign Up**: Register as a user to access the platform's features.
-2. **Admin Access**: Admins can manage products, categories, and user roles.
+2. **Admin Access**: Admins can manage brands, categories, subcategories, products, and perform CRUD operations on users.
 3. **User Interaction**: Browse products, manage your cart, place orders, and write reviews.
 
 ## 🤝 Contributing
