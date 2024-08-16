@@ -16,7 +16,9 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 
 ### Product Management
 - **CRUD Operations**: Admins can create, read, update, and delete brands, categories, subcategories, and products.
-- **Image Handling**: Upload and manage images for brands, categories, and products using Cloudinary. Product images are organized into specific folders.
+- **Image Handling**: 
+  - **Brands, Categories, Subcategories**: Images are uploaded to Cloudinary.
+  - **Products**: Each product features a main image and multiple cover images, with each image organized into different folders within the product's directory.
 - **Coupons Module**: Admins can manage coupons; users can apply them during checkout for discounts.
 - **Cart Management**: Users can handle their carts, apply coupons, and view detailed pricing information.
 
@@ -58,3 +60,11 @@ We welcome contributions! To get started:
 3. **Commit Changes**: Use `git commit -m 'Add new feature'` to save your progress.
 4. **Push to GitHub**: Push your branch with `git push origin feature-branch`.
 5. **Submit a Pull Request**: Open a pull request to propose your changes.
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE). See the LICENSE file for details.
+
+---
+
+Feel free to customize this further based on your preferences or project specifics!
