@@ -2,6 +2,10 @@
 
 Welcome to the E-Commerce Platform! This robust application is designed to handle all the essential features of an e-commerce website. Built with Node.js, Express.js, MongoDB, and Mongoose, this project offers a comprehensive solution for managing products, orders, users, and more. Deployed on Vercel and connected to MongoDB Atlas, it ensures reliable performance and scalability.
 
+## 🌐 Live Demo
+
+Experience the application in action: [E-Commerce Platform Demo](https://e-commerce-ajzf.vercel.app/)
+
 ## 🚀 Features
 
 ### User Authentication & Authorization
