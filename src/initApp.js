@@ -25,12 +25,8 @@ export const initApp = (app, express)=>{
         if(event.type=="checkout.session.completed"){
             checkout = event.data.object;
         }
-        
-       
-            
       
-      
-        res.send();
+        res.status(200).json(checkout);
       })) 
       
 app.use(express.json())
