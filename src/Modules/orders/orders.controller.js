@@ -7,7 +7,7 @@ import { asyncHandler } from "../../utils/errorHandling.js";
 import { createInvoice } from "../../utils/pdf.js";
 import sendEmail from "../../services/sendEmail.js";
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.stripe_secret);
+const stripe = new Stripe("sk_test_51PowdnBFvvRLYJUUI0ZgY8ntC1ZGMfzHkIbd0YwMNnHz987dCXK0QtT0mOinm825rRwY1LLwnUzgiAsUO0PjFVlv00GDADH0wS");
 
 // ==================================create order ============================================================
 export const createCashOrder = asyncHandler(async(req,res,next)=>{
@@ -110,7 +110,7 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
 // ===============================================webhook===============================================================
 export const createWebHook = asyncHandler((req, res) => {
     const sig = req.headers['stripe-signature'].toString();
-    let event =stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+    let event =stripe.webhooks.constructEvent(req.body, sig,"wwhsec_adRDHAoqvyP3tO5M7Tt2fjRG7RdIE0MF");
     let checkoutSession;
     if (event.type === "checkout.session.completed") {
         checkoutSession = event.data.object; 
