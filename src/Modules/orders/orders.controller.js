@@ -113,16 +113,24 @@ export const createWebHook = asyncHandler((req, res) => {
     const sig = req.headers['stripe-signature'];
     const stripe = new Stripe(process.env.stripe_secret);
 
-    let event= stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+    let event;
 
-    let checkout
-
-    if(event.type=="checkout.session.completed"){
-        checkout = event.data.object;
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+    } catch (err) {
+        console.error('Webhook signature verification failed:', err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
     }
-  
-    res.status(200).json(checkout);
-  })
+
+    let checkout;
+
+    if (event.type === "checkout.session.completed") {
+        checkout = event.data.object;
+        console.log('Checkout session completed:', checkout);
+    }
+
+    res.status(200).json(checkout || { message: 'Event received but not processed' });
+});
 // =============================================get own orders============================================================
 export const getOwnOrders = asyncHandler(async(req,res,next)=>{
 
