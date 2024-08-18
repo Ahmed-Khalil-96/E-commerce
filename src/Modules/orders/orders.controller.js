@@ -116,7 +116,7 @@ export const createWebHook = asyncHandler((req, res) => {
         checkoutSession = event.data.object; 
     }
 
-    res.status(200).json(checkoutSession);
+    res.json(checkoutSession);
 });
 
 
