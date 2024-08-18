@@ -7,7 +7,7 @@ import { asyncHandler } from "../../utils/errorHandling.js";
 import { createInvoice } from "../../utils/pdf.js";
 import sendEmail from "../../services/sendEmail.js";
 import Stripe from 'stripe';
-
+const stripe = new Stripe(process.env.stripe_secret);
 
 // ==================================create order ============================================================
 export const createCashOrder = asyncHandler(async(req,res,next)=>{
@@ -76,7 +76,6 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
 // =================================checkout session ========================================================
 export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
     const {address}=req.body
-    const stripe = new Stripe(process.env.stripe_secret);
     const cart = await cartModel.findOne({user:req.user.id})
     if(!cart) return next(new AppError('Cart is empty',400))
     let totalPriceAfterDiscount=cart.totalPriceAfterDiscount||cart.totalPrice
@@ -111,17 +110,13 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
 // ===============================================webhook===============================================================
 export const createWebHook = asyncHandler((req, res) => {
     const sig = req.headers['stripe-signature'].toString();
-    const stripe = new Stripe(process.env.stripe_secret);
-
     let event =stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
-  
-    let checkout;
-
+    let checkoutSession;
     if (event.type === "checkout.session.completed") {
-        checkout = event.data.object; 
+        checkoutSession = event.data.object; 
     }
 
-    res.status(200).json(checkout);
+    res.status(200).json(checkoutSession);
 });
 
 
