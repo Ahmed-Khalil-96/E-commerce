@@ -16,18 +16,25 @@ const stripe = new Stripe(process.env.stripe_secret);
 export const initApp = (app, express)=>{
     
   
-    app.post('/orders/webhook', express.raw({type: 'application/json'}),asyncHandler((req, res) => {
-        const sig = req.headers['stripe-signature'].toString();
-        let event= stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
-
-        let checkout
-
-        if(event.type=="checkout.session.completed"){
-            checkout = event.data.object;
+    app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
+        const sig = req.headers['stripe-signature'];
+      
+        let event;
+      
+        try {
+          event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        } catch (err) {
+          res.status(400).send(`Webhook Error: ${err.message}`);
+          return;
+        }
+        let checkoutSessionCompleted
+        if (event.type ==="checkout.session.completed") {
+        
+             checkoutSessionCompleted = event.data.object;
         }
       
-        res.status(200).json(checkout);
-      })) 
+        res.status(200).json({msg:"done"});
+      });
       
 app.use(express.json())
 
