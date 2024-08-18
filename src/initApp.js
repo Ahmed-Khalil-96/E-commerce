@@ -16,7 +16,7 @@ export const initApp = (app, express)=>{
 
       
 app.use((req,res,next)=>{
-    if(req.originalUrl.startsWith("/order/webhook")){
+    if(req.originalUrl.startsWith("/orders/webhook")){
         next()
     }else{
         express.json()(req,res,next)
