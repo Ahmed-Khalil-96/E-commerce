@@ -107,6 +107,22 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
 
 
 })
+
+// ===============================================web hook===============================================================
+export const createWebHook = asyncHandler((req, res) => {
+    const sig = req.headers['stripe-signature'];
+    const stripe = new Stripe(process.env.stripe_secret);
+
+    let event= stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+
+    let checkout
+
+    if(event.type=="checkout.session.completed"){
+        checkout = event.data.object;
+    }
+  
+    res.status(200).json(checkout);
+  })
 // =============================================get own orders============================================================
 export const getOwnOrders = asyncHandler(async(req,res,next)=>{
 
