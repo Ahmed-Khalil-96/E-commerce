@@ -12,7 +12,7 @@ import cors from "cors"
 import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
 
-
+let checkout
 const stripe = new Stripe(process.env.stripe_secret);
 export const initApp = (app, express)=>{
     
@@ -21,7 +21,7 @@ export const initApp = (app, express)=>{
         const sig = req.headers['stripe-signature'];
         let event= stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
 
-        let checkout
+       
         if(event.type=="checkout.session.completed"){
             checkout = event.data.object;
         }
