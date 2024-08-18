@@ -12,22 +12,26 @@ import cors from "cors"
 import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
 
-let checkout
 const stripe = new Stripe(process.env.stripe_secret);
-export const initApp = (app, express)=>{
-    
-  
-    app.post('/orders/webhook', express.raw({type: 'application/json'}),asyncHandler((req, res) => {
+export const initApp = (app, express) => {
+    app.post('/orders/webhook', express.raw({type: 'application/json'}), asyncHandler(async (req, res) => {
         const sig = req.headers['stripe-signature'];
-        let event= stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+        let event;
 
-       
-        if(event.type=="checkout.session.completed"){
-            checkout = event.data.object;
+        try {
+            event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+        } catch (err) {
+            console.error('Error verifying webhook signature:', err.message);
+            return res.status(400).send(`Webhook Error: ${err.message}`);
         }
-      
-        res.status(200).json(checkout);
-      })) 
+
+        if (event.type === "checkout.session.completed") {
+            const checkout = event.data.object;
+            return res.status(200).json(checkout);
+        }
+
+        res.status(200).send('Received event but not processed');
+    }));
       
 app.use(express.json())
 
