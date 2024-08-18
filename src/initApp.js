@@ -14,7 +14,7 @@ import { asyncHandler } from './utils/errorHandling.js'
 export const initApp = (app, express)=>{
     
 
-      
+app.use(cors())
 app.use((req,res,next)=>{
     if(req.originalUrl=="/orders/webhook"){
         next()
@@ -23,7 +23,7 @@ app.use((req,res,next)=>{
     }
 })
 
-app.use(cors())
+
 connection()
 app.get("/",(req,res)=>{
     res.status(200).json("Server is running")
