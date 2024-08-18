@@ -109,13 +109,12 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
 
 // ===============================================webhook===============================================================
 export const createWebHook = asyncHandler((req, res) => {
-    const sig = req.headers['stripe-signature'].toString();
+    const sig = req.headers['stripe-signature'];
     let event =stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
     let checkoutSession;
     if (event.type === "checkout.session.completed") {
         checkoutSession = event.data.object; 
     }
-
     res.json(checkoutSession);
 });
 
