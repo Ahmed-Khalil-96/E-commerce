@@ -34,9 +34,6 @@ export const createCategory = asyncHandler(async(req,res,next)=>{
         model:categoryModel,
         id:category._id
     }
-    const x = 4
-    x=5
-
     return res.status(201).json({message:"Category created successfully",category})
 })
 

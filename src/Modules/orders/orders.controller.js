@@ -6,6 +6,7 @@ import { AppError } from "../../utils/errorClass.js";
 import { asyncHandler } from "../../utils/errorHandling.js";
 import { createInvoice } from "../../utils/pdf.js";
 import sendEmail from "../../services/sendEmail.js";
+import Stripe from 'stripe';
 
 
 // ==================================create order ============================================================
@@ -71,6 +72,41 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
    return res.status(201).json({message:"Order created successfully",order})
 })
 
+
+// =================================checkout session ========================================================
+export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
+    const {address}=req.body
+    const stripe = new Stripe(process.env.stripe_secret);
+    const cart = await cartModel.findOne({user:req.user.id})
+    if(!cart) return next(new AppError('Cart is empty',400))
+    let totalPriceAfterDiscount=cart.totalPriceAfterDiscount||cart.totalPrice
+    const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            price_data:{
+            currency: 'egp',
+            unit_amount:totalPriceAfterDiscount*100,
+            product_data:{
+            name:`${req.user.firstName} ${req.user.lastName}`}
+          },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: `${req.protocol}://${req.headers.host}/orders`,
+        cancel_url: `${req.protocol}://${req.headers.host}/cart`,
+        customer_email:req.user.email,
+        client_reference_id:cart._id.toString(),
+        metadata:address
+
+      });
+
+      return res.status(200).json({msg:"Success",session})
+
+
+
+
+})
 // =============================================get own orders============================================================
 export const getOwnOrders = asyncHandler(async(req,res,next)=>{
 

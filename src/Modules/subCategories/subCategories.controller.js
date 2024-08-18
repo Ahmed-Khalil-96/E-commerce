@@ -34,12 +34,12 @@ export const createSubCategory = asyncHandler(async(req,res,next)=>{
             lower:true
         })
 
-     await subCategoryModel.create({name,slug,category:categoryId,addedBy:req.user.id,customId,image:{secure_url,public_id}})
+   const newSubCategory=  await subCategoryModel.create({name,slug,category:categoryId,addedBy:req.user.id,customId,image:{secure_url,public_id}})
      req.data={
         model:subCategoryModel,
-        id:subCategory._id
+        id:newSubCategory._id
      }
-     return res.status(201).json({message:"Sub Category created successfully"})
+     return res.status(201).json({message:"Sub Category created successfully",newSubCategory})
 })
 
 
