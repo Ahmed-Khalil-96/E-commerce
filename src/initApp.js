@@ -9,21 +9,29 @@ import dotenv from "dotenv"
 dotenv.config({path: path.resolve("config/.env")});
 import path from "path"
 import cors from "cors"
+import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
 
+const stripe = new Stripe(process.env.stripe_secret);
 export const initApp = (app, express)=>{
     
+  
+    app.post('/orders/webhook', express.raw({type: 'application/json'}),asyncHandler((req, res) => {
+        const sig = req.headers['stripe-signature'].toString();
+        let event= stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+
+        let checkout
+
+        if(event.type=="checkout.session.completed"){
+            checkout = event.data.object;
+        }
+      
+        res.status(200).json(checkout);
+      })) 
+      
+app.use(express.json())
 
 app.use(cors())
-app.use((req,res,next)=>{
-    if(req.originalUrl=="/orders/webhook"){
-        next()
-    }else{
-        express.json()(req,res,next)
-    }
-})
-
-
 connection()
 app.get("/",(req,res)=>{
     res.status(200).json("Server is running")
