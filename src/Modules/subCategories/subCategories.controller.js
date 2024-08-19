@@ -57,7 +57,7 @@ export const updateSubCategory = asyncHandler(async(req,res,next)=>{
         return next(new AppError("Sub Category not found", 404));
         }
 
-        if(category._id!==subCategory.category){
+        if(category._id.toString()!==subCategory.category.toString()){
             return next(new AppError("Sub Category does not belong to this category", 400))
         }
         if(subCategory.name === name){
