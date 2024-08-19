@@ -10,6 +10,6 @@ orderRouter.get("/ownOrders",auth([systemRoles.user]),OC.getOwnOrders)
 orderRouter.get("/allOrders",auth([systemRoles.admin]),OC.getAllOrders)
 orderRouter.patch("/cancel/:id",auth([systemRoles.user,systemRoles.admin]), OC.cancelOrder)
 orderRouter.post("/create-checkout-session",auth([systemRoles.user]),OC.createCheckOutSession)
-// orderRouter.post('/webhook', express.raw({type: 'application/json'}),OC.createWebHook)
+orderRouter.post('/webhook', express.raw({type: 'application/json'}),OC.createWebHook)
 
 export default orderRouter

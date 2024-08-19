@@ -25,25 +25,7 @@ export const initApp = (app, express)=>{
         });
     
   
-    app.post('/webhook', express.raw({type:'application/json'}), (req, res) => {
-        const sig = req.headers['stripe-signature'];
-      
-        let event;
-        try {
-          event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
-        } catch (err) {
-          res.status(400).send(`Webhook Error: ${err.message}`);
-          return;
-        }
-       
-        if (event.type ==="checkout.session.completed") {
-        
-             checkoutSessionCompleted = event.data.object;
-        }
-      
-        res.status(200).json({msg:"done"});
-      });
-      
+   
 
 
 app.use(cors())
