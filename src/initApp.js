@@ -41,7 +41,7 @@ export const initApp = (app, express)=>{
              checkoutSessionCompleted = event.data.object;
         }
       
-        res.status(200).json({msg:"done"},checkoutSessionCompleted);
+        res.json({msg:"done"},checkoutSessionCompleted);
       });
       
 
