@@ -135,7 +135,7 @@ export const createWebHook = asyncHandler( async(req, res,next) => {
             products:cart.products,
             address:checkoutSessionCompleted.metadata,
             totalPrice:cart.totalPrice,
-            discount:discount,
+            discount:cart.discount,
             totalPriceAfterDiscount:checkoutSessionCompleted.amount_total/100,
             coupon:cart.coupon,
             paymentMethod:"card",
@@ -207,7 +207,7 @@ export const getUserOrders =asyncHandler(async(req,res,next)=>{
     })
     return res.status(200).json(orders)
 })
-
+// ====================================get all orders===========================================
 export const getAllOrders = asyncHandler(async(req,res,next)=>{
     const orders = await orderModel.find().populate({
         path:"products.productId",
