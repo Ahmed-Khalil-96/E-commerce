@@ -8,10 +8,10 @@ import * as AV from "./auth.validation.js";
 const authRouter = Router()
 
 
-authRouter.post("/",AC.signUp, validation(AV.signUp))
-authRouter.get("/confirmEmail/:token",AC.confirmEmail,validation(AV.confirmEmail))
-authRouter.get("/refToken/:refToken", AC.resendEmail, validation(AV.resendEmail))
+authRouter.post("/",validation(AV.signUp),AC.signUp)
+authRouter.get("/confirmEmail/:token",validation(AV.confirmEmail),AC.confirmEmail)
+authRouter.get("/refToken/:refToken", validation(AV.resendEmail), AC.resendEmail)
 authRouter.post("/login",AC.login,validation(AV.login))
-authRouter.patch("/forgetPassword",AC.forgetPassword,validation(AV.forgetPassword))
-authRouter.patch("/resetPassword", AC.resetPassword,validation(AV.resetPassword))
+authRouter.patch("/forgetPassword",validation(AV.forgetPassword),AC.forgetPassword)
+authRouter.patch("/resetPassword",validation(AV.resetPassword), AC.resetPassword)
 export default authRouter
