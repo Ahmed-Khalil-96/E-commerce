@@ -151,30 +151,30 @@ export const createWebHook = asyncHandler(async (req, res, next) => {
   
       await cartModel.findByIdAndDelete(checkoutSessionCompleted.client_reference_id);
   
-      const invoice = {
-        shipping: {
-          name: `${user.firstName} ${user.lastName}`,
-          address: `${order.address.buildingNumber} ${order.address.street}, ${order.address.state}`,
-          city: order.address.city,
-          state: order.address.state,
-          country: "Egypt",
-          postal_code: order.address.zipCode,
-        },
-        items: order.products,
-        subtotal: order.totalPrice,
-        paid: order.totalPriceAfterDiscount,
-        invoice_nr: order._id,
-        date: order.createdAt,
-        discount: order.discount || 0,
-      };
+      // const invoice = {
+      //   shipping: {
+      //     name: `${user.firstName} ${user.lastName}`,
+      //     address: `${order.address.buildingNumber} ${order.address.street}, ${order.address.state}`,
+      //     city: order.address.city,
+      //     state: order.address.state,
+      //     country: "Egypt",
+      //     postal_code: order.address.zipCode,
+      //   },
+      //   items: order.products,
+      //   subtotal: order.totalPrice,
+      //   paid: order.totalPriceAfterDiscount,
+      //   invoice_nr: order._id,
+      //   date: order.createdAt,
+      //   discount: order.discount || 0,
+      // };
   
-      createInvoice(invoice, "invoice.pdf");
-      await sendEmail(user.email, "Order Placed", `<p>Your Order details</p>`, [
-        {
-          path: "invoice.pdf",
-          contentType: "application/pdf",
-        },
-      ]);
+      // createInvoice(invoice, "invoice.pdf");
+      // await sendEmail(user.email, "Order Placed", `<p>Your Order details</p>`, [
+      //   {
+      //     path: "invoice.pdf",
+      //     contentType: "application/pdf",
+      //   },
+      // ]);
   
       return res.status(201).json({ message: "Order created successfully", order });
     }
