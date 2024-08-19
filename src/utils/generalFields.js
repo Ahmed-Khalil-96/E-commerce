@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { Types } from "mongoose";
 
 
 
@@ -15,6 +16,7 @@ export const generalFiled = {
         password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/),
         rePassword: Joi.string().valid(Joi.ref("password")),
         id: Joi.string().custom(validationObjectId),
+
         file: Joi.object({
          size: Joi.number().positive().required(),
             path: Joi.string().required(),

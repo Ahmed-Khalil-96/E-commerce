@@ -193,7 +193,7 @@ export const getOwnOrders = asyncHandler(async(req,res,next)=>{
     return res.status(200).json(orders)
 })
 
-
+// =============================get user Orders
 export const getUserOrders =asyncHandler(async(req,res,next)=>{
     const{userId}=req.params
     const orders = await orderModel.find({user:userId}).populate({

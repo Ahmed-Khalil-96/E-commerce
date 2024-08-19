@@ -108,7 +108,7 @@ export const deleteUser = asyncHandler(async(req,res,next)=>{
 // =======================================getProfile===================================================
 export const getProfile = asyncHandler(async(req,res,next)=>{
     const {id} =req.params
-    const userExist = await userModel.findById(id).select("-password")
+    const userExist = await userModel.findById(id).select("-password").select("-_id")
     if(!userExist){
         return next(new AppError("User not found",404))
         }
