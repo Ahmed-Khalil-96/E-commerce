@@ -9,7 +9,7 @@ export const createSubCategory = {
         image:generalFiled.file.required()
         })
     }),
-    headers:generalFiled.headers.required,
+    headers:generalFiled.headers.required(),
     params:Joi.object({
         categoryId:generalFiled.id.required()
     })
