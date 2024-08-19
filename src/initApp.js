@@ -16,6 +16,13 @@ const stripe = new Stripe(process.env.stripe_secret);
 
 
 export const initApp = (app, express)=>{
+    app.use((req, res, next) => {
+        if (req.originalUrl === '/webhook') {
+        next();
+        } else {
+        express.json()(req, res, next);
+        }
+        });
     
   
     app.use('/webhook', express.raw({type:'application/json'}), (req, res) => {
