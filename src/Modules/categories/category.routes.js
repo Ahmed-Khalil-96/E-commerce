@@ -10,7 +10,6 @@ import* as CV from "./category.validation.js";
 
 const categoryRouter=Router()
 
-
 categoryRouter.use("/:categoryId/subCategories",subCategoriesRouter)
 categoryRouter.post("/", multerHost(validFiles.image).single("image"),validation(CV.createCategory),auth([systemRoles.admin]),CC.createCategory)
 categoryRouter.patch("/updateCategory/:id",multerHost(validFiles.image).single("image"),validation(CV.updateCategory),auth([systemRoles.admin]),CC.updateCategory)
