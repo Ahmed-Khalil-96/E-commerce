@@ -55,7 +55,7 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 2. **Admin Access**: Admins can manage brands, categories, subcategories, products, and perform CRUD operations on users.
 3. **User Interaction**: Browse products, manage your cart, place orders, and write reviews.
 
-## 🤝 Contributing
+## 🤝 Contributing 
 
 Feel free to contribute to the project! Whether you have a new feature in mind, a bug to fix, or just want to improve the project, your contributions are welcome. We appreciate any help and look forward to collaborating with you!
 
