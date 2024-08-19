@@ -11,8 +11,7 @@ import path from "path"
 import cors from "cors"
 import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
-let  checkoutSessionCompleted
-const stripe = new Stripe(process.env.stripe_secret);
+
 
 
 export const initApp = (app, express)=>{

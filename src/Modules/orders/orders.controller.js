@@ -8,6 +8,7 @@ import { createInvoice } from "../../utils/pdf.js";
 import sendEmail from "../../services/sendEmail.js";
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.stripe_secret);
+let  checkoutSessionCompleted
 
 // ==================================create order ============================================================
 export const createCashOrder = asyncHandler(async(req,res,next)=>{
@@ -110,7 +111,7 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
 // ===============================================webhook===============================================================
 export const createWebHook =  (req, res) => {
         const sig = req.headers['stripe-signature'];
-      
+    
         let event;
         try {
           event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
@@ -118,7 +119,7 @@ export const createWebHook =  (req, res) => {
           res.status(400).send(`Webhook Error: ${err.message}`);
           return;
         }
-       
+
         if (event.type ==="checkout.session.completed") {
         
              checkoutSessionCompleted = event.data.object;
