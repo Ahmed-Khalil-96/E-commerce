@@ -25,7 +25,8 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 - **Cart Management**: Users can handle their carts, apply coupons, and view detailed pricing information before checkout.
 
 ### Order & Payment
-- **Order Processing**: Users can place orders, apply coupons, and manage their orders with a cash payment option (card checkout coming soon).
+- **Order Processing**: Users can place orders, apply coupons, and manage their orders with a cash payment option.
+- **Card Checkout**: Integrated with Stripe to provide a seamless and secure card payment experience during checkout.
 - **Order Management**: View and cancel orders if they haven't been shipped.
 - **Invoice Generation**: Automatic invoice creation for each order, with detailed order information sent to users.
 
