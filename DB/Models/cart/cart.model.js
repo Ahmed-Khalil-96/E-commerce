@@ -34,7 +34,10 @@ const cartSchema = new Schema({
         max:100
 
     },
-    totalPriceAfterDiscount:Number
+    totalPriceAfterDiscount:Number,
+    coupon:{
+        type:String
+    }
 })
 
 

@@ -7,13 +7,13 @@ import { asyncHandler } from "../../utils/errorHandling.js";
 import { createInvoice } from "../../utils/pdf.js";
 import sendEmail from "../../services/sendEmail.js";
 import Stripe from 'stripe';
+import userModel from "../../../DB/Models/user/user.Model.js";
 const stripe = new Stripe(process.env.stripe_secret);
 
 // ==================================create order ============================================================
 export const createCashOrder = asyncHandler(async(req,res,next)=>{
     
     const {address}=req.body
-    const{coupon}= req.query
     const cart = await cartModel.findOne({user:req.user.id})
     if(!cart) return next(new AppError('Cart is empty',400))
 
@@ -27,7 +27,7 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
         totalPrice:cart.totalPrice,
         discount:discount,
         totalPriceAfterDiscount:totalPriceAfterDiscount,
-        coupon,
+        coupon:cart.coupon,
         isPlaced:true
     })
     await order.save()
@@ -108,7 +108,7 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
 })
 
 // ===============================================webhook===============================================================
-export const createWebHook =  (req, res) => {
+export const createWebHook =  async(req, res) => {
         const sig = req.headers['stripe-signature'];
         let  checkoutSessionCompleted
 
@@ -121,8 +121,66 @@ export const createWebHook =  (req, res) => {
         }
 
         if (event.type ==="checkout.session.completed") {
+            checkoutSessionCompleted = event.data.object;
+            let user = await userModel.findOne({email:checkoutSessionCompleted.customer_email})
         
-             checkoutSessionCompleted = event.data.object;
+            const cart = await cartModel.findById(checkoutSessionCompleted.client_reference_id)
+            if(!cart) return next(new AppError('Cart is empty',400))
+        
+                let discount = cart.discount||""                
+                const order = new orderModel({
+                user:user._id,
+                products:cart.products,
+                address:checkoutSessionCompleted.metadata,
+                totalPrice:cart.totalPrice,
+                discount:discount,
+                totalPriceAfterDiscount:checkoutSessionCompleted.amount_total/100,
+                coupon:cart.coupon,
+                paymentMethod:"card",
+                isPlaced:true,
+                isPaid:true
+            })
+            await order.save()
+            req.data={
+                model:orderModel,
+                id:order._id
+            }
+        
+            for (const product of order.products) {
+                await productModel.findByIdAndUpdate(product.productId,{$inc:{stock:-product.quantity}})
+                
+            }
+            if(cart.coupon){
+                await couponModel.findOneAndUpdate({code:cart.coupon},{$push:{usedBy:user._id}})
+            }
+           
+            await cartModel.findOneAndDelete({_id:checkoutSessionCompleted.client_reference_id})
+        
+            const invoice = {
+                shipping: {
+                  name: `${user.firstName} ${user.lastName  }`,
+                  address:` ${order.address.buildingNumber} ${order.address.street},${order.address.state}`,
+                  city: order.address.city,
+                  state: order.address.state,
+                  country: "Egypt",
+                  postal_code: order.address.zipCode
+                },
+                items: order.products,
+                subtotal: order.totalPrice,
+                paid:order.totalPriceAfterDiscount,
+                invoice_nr: order._id,
+                date:order.createdAt,
+                discount:order.discount||0
+              };
+              
+              createInvoice(invoice, "invoice.pdf");
+              await sendEmail(req.user.email,"Order Placed",`<p>Your Order details</p>`,[
+                {path:"invoice.pdf",
+                contentType:"application/pdf"
+                }
+              ])
+           return res.status(201).json({message:"Order created successfully",order})
+            
         }
       
         res.status(200).json({msg:"done",checkoutSessionCompleted});

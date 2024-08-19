@@ -147,6 +147,7 @@ export const applyCoupon = asyncHandler(async(req,res,next)=>{
     }
         cart.discount=couponExist.amount
         cart.totalPriceAfterDiscount=cart.totalPrice-(cart.totalPrice*couponExist.amount)/100
+        cart.coupon=coupon
         await cart.save()
         return res.status(200).json(cart)
 })
