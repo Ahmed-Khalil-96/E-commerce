@@ -11,7 +11,7 @@ import path from "path"
 import cors from "cors"
 import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
-
+let  checkoutSessionCompleted
 const stripe = new Stripe(process.env.stripe_secret);
 
 
@@ -25,7 +25,7 @@ export const initApp = (app, express)=>{
         });
     
   
-    app.use('/webhook', express.raw({type:'application/json'}), (req, res) => {
+    app.post('/webhook', express.raw({type:'application/json'}), (req, res) => {
         const sig = req.headers['stripe-signature'];
       
         let event;
@@ -38,13 +38,13 @@ export const initApp = (app, express)=>{
        
         if (event.type ==="checkout.session.completed") {
         
-           let  checkoutSessionCompleted = event.data.object;
+             checkoutSessionCompleted = event.data.object;
         }
       
-        res.status(200).json({msg:"done"});
+        res.status(200).json({msg:"done"},checkoutSessionCompleted);
       });
       
-app.use(express.json())
+
 
 app.use(cors())
 connection()
