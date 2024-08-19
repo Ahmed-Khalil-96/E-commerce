@@ -13,6 +13,7 @@ import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
 
 const stripe = new Stripe(process.env.stripe_secret);
+let checkoutSessionCompleted
 
 export const initApp = (app, express)=>{
     
@@ -25,7 +26,7 @@ export const initApp = (app, express)=>{
        
         if (event.type ==="checkout.session.completed") {
         
-             const checkoutSessionCompleted = event.data.object;
+             checkoutSessionCompleted = event.data.object;
         }
       
         res.status(200).json({msg:"done"});
