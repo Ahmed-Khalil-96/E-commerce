@@ -11,18 +11,20 @@ import path from "path"
 import cors from "cors"
 import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
+import { adminApplication } from './Modules/User/user.controller.js'
 let  checkoutSessionCompleted
 const stripe = new Stripe(process.env.stripe_secret);
 
 
 export const initApp = (app, express)=>{
-    app.use((req, res, next) => {
-        if (req.originalUrl === '/webhook') {
-          next();
-        } else {
-          express.json()(req, res, next);
+    app.use(express.json({
+        verify: function (req, res, buf) {
+            var url = req.originalUrl;
+            if (url.startsWith('/webhook')) {
+                req.rawBody = buf.toString()
+            }
         }
-      });
+    }));
       
       // Stripe requires the raw body to construct the event
       app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
@@ -31,7 +33,7 @@ export const initApp = (app, express)=>{
         let event;
       
         try {
-          event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+          event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.endpointSecret);
         } catch (err) {
           // On error, log and return the error message
           console.log(`❌ Error message: ${err.message}`);
@@ -45,7 +47,7 @@ export const initApp = (app, express)=>{
         res.json({received: true});
       });
 
-
+app.use(express.json())
 app.use(cors())
 connection()
 app.get("/",(req,res)=>{
