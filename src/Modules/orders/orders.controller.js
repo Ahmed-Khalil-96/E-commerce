@@ -92,7 +92,7 @@ export const createCheckOutSession = asyncHandler(async(req,res,next)=>{
           },
         ],
         mode: 'payment',
-        payment_method_types:"card",
+        payment_method_types:["card"],
         success_url: `${req.protocol}://${req.headers.host}/orders`,
         cancel_url: `${req.protocol}://${req.headers.host}/cart`,
         customer_email:req.user.email,
