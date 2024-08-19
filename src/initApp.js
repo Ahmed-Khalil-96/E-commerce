@@ -25,7 +25,7 @@ export const initApp = (app, express)=>{
         });
     
   
-    app.post('/webhook', express.raw({type:'application/json'}), (req, res) => {
+    app.post('/webhook', express.raw({type:'application/json'}), asyncHandler((req, res) => {
         const sig = req.headers['stripe-signature'];
       
         let event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
@@ -36,8 +36,8 @@ export const initApp = (app, express)=>{
              checkoutSessionCompleted = event.data.object;
         }
       
-        res.json({msg:"done"},checkoutSessionCompleted);
-      });
+        return res.status(200).json({msg:"done"},checkoutSessionCompleted);
+      }));
       
 
 
