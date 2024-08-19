@@ -4,7 +4,7 @@ import { generalFiled, headers } from "../../utils/generalFields.js";
 
 export const addReview = {
     body:Joi.object({
-        rete:Joi.number().required(),
+        rate:Joi.number().required(),
         comment:Joi.string().required(),
     }),
     params:Joi.object({

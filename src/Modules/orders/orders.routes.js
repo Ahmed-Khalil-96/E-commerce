@@ -7,7 +7,7 @@ import * as OV from "./orders.validation.js";
 const orderRouter= Router({mergeParams:true})
 
 orderRouter.post("/",validation(OV.createOrder),auth([systemRoles.user]),OC.createCashOrder)
-orderRouter.get("/:userId",validation(OV.getUserOrders),auth([systemRoles.admin]),OC.getUserOrders)
+orderRouter.get("/",validation(OV.getUserOrders),auth([systemRoles.admin]),OC.getUserOrders)
 orderRouter.get("/ownOrders",validation(OV.getOwnOrders),auth([systemRoles.user,systemRoles.admin]),OC.getOwnOrders)
 orderRouter.get("/allOrders",validation(OV.getAllOrders),auth([systemRoles.admin]),OC.getAllOrders)
 orderRouter.patch("/cancel/:id",validation(OV.cancelOrder),auth([systemRoles.user,systemRoles.admin]), OC.cancelOrder)

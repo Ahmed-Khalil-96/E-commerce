@@ -6,10 +6,12 @@ export const createSubCategory = {
     body:Joi.object({
         name:generalFiled.name.required(),
 
-        file:Joi.object({
-        image:generalFiled.file.required()
-        })
+       
     }),
+
+    file:Joi.object({
+        image:generalFiled.file.required()
+        }) ,
     headers:generalFiled.headers.required(),
     params:Joi.object({
         categoryId:generalFiled.id.required()
@@ -19,10 +21,11 @@ export const createSubCategory = {
 export const updateSubCategory = {
     body:Joi.object({
         name:generalFiled.name,
-        file:Joi.object({
-            image:generalFiled.file
-                })
+       
     }),
+    file:Joi.object({
+        image:generalFiled.file
+            }),
     headers:generalFiled.headers.required(),
     params:Joi.object({
         categoryId:generalFiled.id.required(),

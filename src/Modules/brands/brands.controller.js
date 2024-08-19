@@ -40,6 +40,7 @@ export const createBrand = asyncHandler(async(req,res,next)=>{
 export const updateBrand = asyncHandler(async(req,res,next)=>{
     const {id}=req.params ;
     const {name}=req.body;
+    let slug
     const brand = await brandModel.findById(id)
     if(!brand){
         return next(new AppError("Brand not found",404))
@@ -47,20 +48,27 @@ export const updateBrand = asyncHandler(async(req,res,next)=>{
     if(req.user.id.toString()!==brand.addedBy.toString()){
         return next(new AppError("You are not authorized to update this brand",403))
     }
+
+    if(name){
     if(await brandModel.findOne({name:name.toLowerCase()})){
         return next(new AppError("Brand already exist",400))
     }
+    brand.name=name;
+
+}
     if(req.file){
         await cloudinary.uploader.destroy(brand.image.public_id)
         const{secure_url,public_id}=await cloudinary.uploader.upload(req.file.path,{
             folder:`Ecommerce/brands/${brand.customId}`})
             brand.image={secure_url,public_id}
     }
-    const slug = slugify(name,{
+   if(name){
+     slug = slugify(name,{
         lower:true
     })
-    brand.name=name;
     brand.slug=slug
+
+   }
     await brand.save()
     return res.status(200).json({message:"Brand updated successfully",brand})
 })

@@ -76,6 +76,6 @@ export const cancelOrder={
 export const getUserOrders = {
     headers: generalFiled.headers.required(),
     params:Joi.object({
-        id:generalFiled.id.required()
+      userId:generalFiled.id.required()
     })
 }

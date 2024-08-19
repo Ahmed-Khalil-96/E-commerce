@@ -5,9 +5,10 @@ import { generalFiled, headers } from "../../utils/generalFields.js";
 export const createCategory = {
     body:Joi.object({
         name:generalFiled.name.required(),
-        file:Joi.object({
-            image:generalFiled.file.required()
-        })
+        
+    }),
+    file:Joi.object({
+        image:generalFiled.file.required()
     }),
     headers:generalFiled.headers.required()
 }

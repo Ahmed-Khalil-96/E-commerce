@@ -44,6 +44,7 @@ app.use("/coupons", routers.couponRouter)
 app.use("/cart",routers.cartRouter)
 app.use("/orders",routers.orderRouter)
 app.use("/reviews",routers.reviewRouter)
+app.use("/wishlist",routers.wishListRouter)
 app.use('*', (req, res,next)=>{
     return next(new AppError("Invalid URL",404))
 } )

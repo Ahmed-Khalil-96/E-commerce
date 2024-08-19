@@ -12,10 +12,16 @@ export const addProduct = {
         subCategory:generalFiled.id.required(),
         brand:generalFiled.id.required(),
         stock:Joi.number().integer().required(),
-        files:Joi.object({
-            image:Joi.array().items(generalFiled.file.required()).required(),
-            coverImages:Joi.array().items(generalFiled.file.required()).required()
-        })
+       
+    }),
+    files:Joi.object({
+        image:Joi.array().items(generalFiled.file.required()).required().messages({
+            "any.required": "Image is required",
+            }),
+        
+        coverImages:Joi.array().items(generalFiled.file.required()).required().messages({
+            "any.required": "Cover Images is required",
+        }) 
     }),
     headers:generalFiled.headers.required()
 }
@@ -30,10 +36,11 @@ export const updateProduct = {
         subCategory:generalFiled.id,
         brand:generalFiled.id,
         stock:Joi.number().integer(),
-        files:Joi.object({
-            image:Joi.array().items(generalFiled.file),
-            coverImages:Joi.array().items(generalFiled.file)
-        })
+        
+    }),
+    files:Joi.object({
+        image:Joi.array().items(generalFiled.file),
+        coverImages:Joi.array().items(generalFiled.file)
     }),
     headers:generalFiled.headers.required(),
     params:Joi.object({
