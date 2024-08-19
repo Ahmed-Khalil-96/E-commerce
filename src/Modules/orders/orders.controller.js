@@ -40,8 +40,8 @@ export const createCashOrder = asyncHandler(async(req,res,next)=>{
         await productModel.findByIdAndUpdate(product.productId,{$inc:{stock:-product.quantity}})
         
     }
-    if(coupon){
-        await couponModel.findOneAndUpdate({code:coupon},{$push:{usedBy:req.user.id}})
+    if(cart.coupon){
+        await couponModel.findOneAndUpdate({code:cart.coupon},{$push:{usedBy:req.user.id}})
     }
    
     await cartModel.findOneAndDelete({user:req.user.id})
