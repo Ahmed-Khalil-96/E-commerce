@@ -13,24 +13,29 @@ import Stripe from 'stripe';
 import { asyncHandler } from './utils/errorHandling.js'
 
 const stripe = new Stripe(process.env.stripe_secret);
-let checkoutSessionCompleted
+
 
 export const initApp = (app, express)=>{
     
   
-    app.use('/webhook', express.raw({type:'application/json'}),asyncHandler((req, res) => {
+    app.use('/webhook', express.raw({type:'application/json'}), (req, res) => {
         const sig = req.headers['stripe-signature'];
       
-        let event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
-       
+        let event;
+        try {
+          event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+        } catch (err) {
+          res.status(400).send(`Webhook Error: ${err.message}`);
+          return;
+        }
        
         if (event.type ==="checkout.session.completed") {
         
-             checkoutSessionCompleted = event.data.object;
+           let  checkoutSessionCompleted = event.data.object;
         }
       
         res.status(200).json({msg:"done"});
-      })) 
+      });
       
 app.use(express.json())
 
