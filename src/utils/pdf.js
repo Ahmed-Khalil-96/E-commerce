@@ -16,7 +16,7 @@ export function createInvoice(invoice, path) {
 
 function generateHeader(doc) {
   doc
-    .image(path.resolve(__dirname, 'Image 00.56.27_d83fb77c.jpg'), 50, 45, { width: 50 })
+    .image(path.resolve('Image 00.56.27_d83fb77c.jpg'), 50, 45, { width: 50 })
     .fillColor("#444444")
     .fontSize(20)
     .text("Ahmed's Ecommerce.", 110, 57)
