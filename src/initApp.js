@@ -16,7 +16,7 @@ const stripe = new Stripe(process.env.stripe_secret);
 export const initApp = (app, express)=>{
     
   
-    app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
+    app.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
         const sig = req.headers['stripe-signature'].toString();
       
         let event;
