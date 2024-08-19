@@ -16,18 +16,18 @@ const stripe = new Stripe(process.env.stripe_secret);
 export const initApp = (app, express)=>{
     
   
-    app.post('/webhook', bodyParser.raw({type: 'application/json'}), (req, res) => {
+    app.post('/webhook', express.raw({type:'application/json'}), (req, res) => {
         const sig = req.headers['stripe-signature'].toString();
       
         let event;
-      
+        let checkoutSessionCompleted
         try {
           event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
         } catch (err) {
           res.status(400).send(`Webhook Error: ${err.message}`);
           return;
         }
-        let checkoutSessionCompleted
+       
         if (event.type ==="checkout.session.completed") {
         
              checkoutSessionCompleted = event.data.object;
