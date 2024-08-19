@@ -7,7 +7,7 @@ export const createSubCategory = {
         name:generalFiled.name.required(),
         file:Joi.object({
         image:generalFiled.file.required()
-        })
+        }).required()
     }),
     headers:generalFiled.headers.required(),
     params:Joi.object({
