@@ -56,7 +56,7 @@ Experience the application in action: [E-Commerce Platform Demo](https://e-comme
 3. **User Interaction**: Browse products, manage your cart, place orders, and write reviews.
 
 ##  API Documentation
-For detailed API endpoints and usage, please refer to https://documenter.getpostman.com/view/33627575/2sA3s9EogZ
+For detailed API endpoints and usage, please refer to https://documenter.getpostman.com/view/33627575/2sA3s9EogZ .
 
 ## 🤝 Contributing 
 
