@@ -9,8 +9,6 @@ import dotenv from "dotenv"
 dotenv.config({path: path.resolve("config/.env")});
 import path from "path"
 import cors from "cors"
-import Stripe from 'stripe';
-import { asyncHandler } from './utils/errorHandling.js'
 
 
 
